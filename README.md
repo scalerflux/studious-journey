@@ -237,7 +237,6 @@ The `Makefile` automates the entire flow: TL-Verilog compilation, pre/post-synth
 **Full Makefile Code** 
 
 ```makefile
-# VSDBabySoC Makefile - Automates simulation & synthesis (local Yosys, no Docker)
 
 SRC_PATH = src
 LIB_PATH = $(SRC_PATH)/lib
