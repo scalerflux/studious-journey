@@ -13,7 +13,6 @@ This project brings together a complete **System on Chip (SoC)** built around th
 
 Cool what's the goal? Create a platform where we can test open-source IP cores simultaneously while learning how digital systems communicate with the analog world—like TVs 📺, speakers 🔊, and mobile devices 📱.
 
----
 
 ## 🔍 So What Exactly is a System on Chip?
 
@@ -49,6 +48,9 @@ Instead of having separate components scattered across a circuit board, everythi
    - Wi-Fi, Bluetooth, encryption modules
    - Varies based on the chip's purpose
 
+![0_uZg3P3cqRcKa7xQb](https://github.com/user-attachments/assets/2cd70c9d-517d-4e24-a1a9-fb83f66dcddc)
+
+
 ### ✨ Why SoCs Rule
 
 - **Compact Design**: Everything fits in your pocket 📏
@@ -65,13 +67,18 @@ Instead of having separate components scattered across a circuit board, everythi
 - Gaming consoles (like Nintendo Switch with NVIDIA Tegra)
 - Modern cars, TVs, and home appliances
 
+<img width="665" height="512" alt="Screenshot 2025-10-04 at 5 26 05 PM" src="https://github.com/user-attachments/assets/6ae0e895-2c38-49a4-85dd-16b4943f3ec1" />
+
+
 ### 🚧 But comes with it's own challenges
 
+- **Cost** : Goes upto milions of dollars
 - **Complex Design**: Fitting everything together requires serious engineering chops (Just think of it, TSMC just the only company who pioneers this complex process)
-- **Heat Management**: Cramped components can get toasty 🔥 (for ex: the Iphone heats up a lot while charging r playing games)
+- **Heat Management**: Cramped components can get toasty 🔥 (for ex: the Iphone heats up a lot while charging or while playing games)
 - **Limited Flexibility**: Once fabricated, changes are tough to make
+- And many more
+<img width="661" height="499" alt="Screenshot 2025-10-04 at 5 36 34 PM" src="https://github.com/user-attachments/assets/1b973bba-1601-4a52-ad3d-21c900b33386" />
 
----
 
 ## 🎨 Types of SoCs
 
@@ -94,7 +101,11 @@ Custom-built for specialized, high-performance jobs:
 - Industrial automation systems
 - Financial trading terminals
 
----
+## SoC design flow
+<img width="661" height="515" alt="Screenshot 2025-10-04 at 5 26 28 PM" src="https://github.com/user-attachments/assets/e7614fab-992d-4f9e-8926-f1f76bc8a18d" />
+
+
+
 
 ## 🔬 Where does VSDBabySoC come into picture?
 
@@ -118,6 +129,9 @@ Generates a stable, synchronized clock signal that keeps everything in perfect t
 - **Phase Detector**: Compares input and output signals, detects phase differences
 - **Loop Filter**: Smooths out the error signal
 - **Voltage-Controlled Oscillator (VCO)**: Adjusts frequency based on the control voltage
+
+![1600447087142](https://github.com/user-attachments/assets/fb39cdd5-73f3-4d02-b89d-1da30f47455f)
+
 
 #### 3️⃣ **DAC - The Translator** 🔄
 Converts digital values (ones and zeros) into smooth analog signals that real-world devices understand.
@@ -152,35 +166,6 @@ Here's the flow from power-on to analog output:
 
 ---
 
-## 🎓 Learning Outcomes
-
-Working with VSDBabySoC teaches you:
-- RISC-V processor architecture
-- Clock generation and synchronization
-- Digital-to-analog conversion techniques
-- SoC integration and timing analysis
-- Open-source hardware design principles
-
----
-
-## 🛠️ Technology Stack
-
-- **Process Technology**: Sky130 (130nm process)
-- **ISA**: RISC-V (open-source instruction set)
-- **Design Flow**: RTL to GDSII
-- **Verification**: Mixed-signal simulation
-
----
-
-## 🌟 Why This Project Matters
-
-VSDBabySoC bridges the gap between theoretical knowledge and practical implementation. By combining a processor, clock generator, and DAC, you get hands-on experience with:
-- Complete SoC design workflows
-- Mixed-signal circuit integration
-- Real-world interfacing challenges
-- Open-source hardware development
-
-Perfect for students, hobbyists, and anyone curious about how modern chips actually work! 🎉
 
 
 </details>
@@ -194,7 +179,7 @@ Perfect for students, hobbyists, and anyone curious about how modern chips actua
 
 # 🚀 VSDBabySoC - Functional Modeling and Simulation
 
-Welcome to my VSDBabySoC project repository! This is a hands-on lab demonstrating functional modeling of a compact RISC-V-based System-on-Chip (SoC) that integrates a processor core, Phase-Locked Loop (PLL), and Digital-to-Analog Converter (DAC). The goal is to verify reset operations, clocking, and dataflow through simulations. 🔬
+This is a hands-on lab demonstrating functional modeling of a compact RISC-V-based System-on-Chip (SoC) that integrates a processor core, Phase-Locked Loop (PLL), and Digital-to-Analog Converter (DAC). The goal is to verify reset operations, clocking, and dataflow through simulations. 🔬
 
 ***
 
@@ -207,6 +192,15 @@ Welcome to my VSDBabySoC project repository! This is a hands-on lab demonstratin
 - 🔹 **AVSDDAC**: 10-bit DAC (`avsddac.v`) that converts digital data from the RISC-V core (via `RV_TO_DAC[9:0]` bus) to analog output (OUT).
 
 The SoC flow: Reset initializes everything ➡️ PLL locks and clocks the core ➡️ Core executes code and sends data to DAC ➡️ DAC produces analog signals. Both pre-synthesis (RTL) and post-synthesis (gate-level) simulations confirm functional correctness. ✅
+
+### 🛠️ Tools Used
+
+- 🔧 **Icarus Verilog (iverilog)**: Compiles/simulates Verilog.
+- 👁️ **GTKWave**: Views/analyzes VCD waveforms.
+- ⚙️ **SandPiper-SaaS**: TL-Verilog → Verilog conversion.
+- 🏗️ **Yosys**: RTL synthesis to gates (local install).
+
+
 
 ***
 
@@ -370,19 +364,22 @@ cd output/post_synth_sim && gtkwave post_synth_sim.vcd
 
 ### 🔄 Reset Operation (Pre-Synthesis)
 
-**Explanation:** Reset (high) zeros registers (r17=0, OUT=0V). Deassert starts PLL and core fetch. Verifies clean initialization—no hanging states. (Time: t=0 to 10ns)
+Reset (high) zeros registers (r17=0, OUT=0V). Deassert starts PLL and core fetch. Verifies clean initialization—no hanging states. (Time: t=0 to 10ns)
 
 ### 🕒 Clocking (Pre-Synthesis)
 
-**Explanation:** PLL enables after ENb_VCO/REF, locks to ~10MHz CLK. Stable edges drive core/DAC sync. No jitter confirms PLL reliability. (Focus: CLK vs REF/VCO_IN)
+PLL enables after ENb_VCO/REF, locks to ~10MHz CLK. Stable edges drive core/DAC sync. No jitter confirms PLL reliability. (Focus: CLK vs REF/VCO_IN)
 
 ### 📈 Dataflow Between Modules (Pre-Synthesis)
 
-**Explanation:** Core executes (addi increments r17), sends via RV_TO_DAC[9:0] to DAC D input. OUT scales analog (0-1V for 0-1023). Proves end-to-end functionality. (Trace: r17 → bus → OUT)
+Core executes (addi increments r17), sends via RV_TO_DAC[9:0] to DAC D input. OUT scales analog (0-1V for 0-1023). Proves end-to-end functionality. (Trace: r17 → bus → OUT)
 
 ### ⚡ Post-Synthesis Comparison
 
-**Explanation:** Gate-level (Sky130 cells) matches RTL: Same sequences, but ~100ps delays from gates (e.g., inv_1 cells). No logic changes—synthesis success! (Synth.log: ~500 gates, 0 warnings)
+Gate-level (Sky130 cells) matches RTL: Same sequences, No logic changes—synthesis success! 
+
+<img width="1043" height="736" alt="Screenshot 2025-10-04 at 5 45 30 PM" src="https://github.com/user-attachments/assets/b224a30e-8038-45fd-baeb-e30783cb2296" />
+
 
 
 
@@ -407,12 +404,5 @@ VSDBabySoC/
 ```
 
 
-
-## 🛠️ Tools Used
-
-- 🔧 **Icarus Verilog (iverilog)**: Compiles/simulates Verilog.
-- 👁️ **GTKWave**: Views/analyzes VCD waveforms.
-- ⚙️ **SandPiper-SaaS**: TL-Verilog → Verilog conversion.
-- 🏗️ **Yosys**: RTL synthesis to gates (local install).
 
 
