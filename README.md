@@ -171,7 +171,7 @@ Here's the flow from power-on to analog output:
 </details>
 
 <details>
-<summary>Patr2</summary>
+<summary>Part2</summary>
 
 
 ## Labs
