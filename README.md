@@ -380,14 +380,14 @@ Gate-level (Sky130 cells) matches RTL: Same sequences, No logic changes—synthe
 ```
 VSDBabySoC/
 ├── Makefile                 # 🚀 Build automation (pre/post-synth sims)
-├── README.md                # 📖 This guide
+├
 ├── src/                     # Source code
 │   ├── module/              # vsdbabysoc.v, rvmyth.tlv, avsdpll.v, avsddac.v, testbench.v
 │   ├── include/             # .vh headers (sandpiper.vh)
 │   ├── lib/                 # .lib files (Sky130 std cells)
 │   ├── gls_model/           # primitives.v, sky130_fd_sc_hd.v
 │   └── script/              # yosys.ys (synthesis script)
-├── output/                  # 🛠️ Results (gitignored large files)
+├── output/                  # 🛠️ Results 
 │   ├── compiled_tlv/        # rvmyth.v (from TL-Verilog)
 │   ├── pre_synth_sim/       # RTL VCD/logs
 │   ├── post_synth_sim/      # Gate-level VCD/logs
