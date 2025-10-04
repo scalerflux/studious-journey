@@ -1,100 +1,418 @@
-# studious-journey
+# RISC-V Tapeout program week 2
 We'll try to get a solid understanding of SoC fundamentals and see how to practice functional modelling of the BabySoC using simulation tools (Icarus Verilog &amp; GTKWave)
 
-## Part 1 - throery
+<details>
+	<summary> Part 1 </summary>
 
-# 🧠 SoC Design Fundamentals & BabySoC — My Reflection
+##  Throery
 
-## 🚀 Introduction
+# 🚀 VSDBabySoC
 
-A **System-on-Chip (SoC)** fuses many of the components of a full computing system onto a single silicon die: CPU(s), memory, I/O, interconnects, and more. This deep integration reduces size, power, and cost while enabling tighter coupling between hardware and software. :contentReference[oaicite:0]{index=0}  
+This project brings together a complete **System on Chip (SoC)** built around the **RVMYTH** RISC-V processor. it's kind of a miniature computer on a single chip, which'll help to learn and experiment with digital-analog interfacing. 🎓
 
-But beauty has its burdens: designing an SoC forces you to think globally about timing, power, domains, communication, verification, and the messy “glue logic.” BabySoC is the sandbox I’m using to surface and wrestle with those challenges on a manageable scale.
 
----
-
-## 🧩 Core Principles & Trade Spaces
-
-Here's what you must juggle when conceiving or analyzing an SoC:
-
-| Domain | What It Means | Key Tradeoffs / Challenges |
-|---|----------------|-------------------------------|
-| **Compute / Cores / Accelerators** | The “brains” — general CPU, DSP, or custom logic | Flexibility vs efficiency; heterogeneous vs homogeneous cores |
-| **Memory & Caching** | On-chip SRAM, caches, interfaces to external DRAM | Latency vs area vs bandwidth; cache coherence and consistency |
-| **Peripherals / I/O** | Interfaces to sensors, displays, network, storage | Pin count, protocol complexity, latency, throughput |
-| **Interconnect / Communication Fabric** | How modules talk internally | Simplicity (bus) vs scalability (crossbar / NoC) |
-| **Clock / Power Domain Management** | Modules may run at different voltages and clocks | Domain crossings, gating, sequencing, isolation |
-| **HW–SW Co-design** | Hardware must support software needs; software must respect hardware constraints | Interface contracts, driver assumptions, memory maps |
-| **Verification & Testing** | Ensuring correctness across modules and integration | Functional, formal, timing, power, fault tolerance |
-| **Physical / Layout / PPA** | Translate logic to geometry with constraints | Placement, routing congestion, thermal, signal integrity, area |
-| **Cost, Yield, Time-to-Market** | Ultimately the chip must make sense economically | Mask costs, non-recurring engineering (NRE), yields vs chip area |
-
-Designing an SoC is not gluing modules; it's sculpting a balanced ecosystem under strict constraints.  
+Cool what's the goal? Create a platform where we can test open-source IP cores simultaneously while learning how digital systems communicate with the analog world—like TVs 📺, speakers 🔊, and mobile devices 📱.
 
 ---
 
-## 🔄 SoC Design Flow (Conceptual)
+## 🔍 So What Exactly is a System on Chip?
 
-This is a high-level flow, but keep in mind it loops (you’ll backtrack often):
+Instead of having separate components scattered across a circuit board, everything gets packed into one tiny chip. That's an SoC!
 
-1. **Requirements & Specification** — workloads, I/O, performance, power, area  
-2. **Architectural Exploration** — what cores, interconnects, memory layout, domain partitioning  
-3. **IP / Block Selection or Design** — pick existing modules or design your own  
-4. **Integration / RTL Design** — connect modules in RTL (Verilog, SystemVerilog)  
-5. **Functional Verification / Simulation** — module-level and system-level tests  
-6. **Synthesis & Timing Analysis** — translate RTL to gate netlists, check timing  
-7. **Place & Route / Physical Design** — map logic to layout, route wires, manage clocks/power  
-8. **Signoff / Checks** — static timing, DRC/LVS, power, noise, equivalence  
-9. **Fabrication / Tape-out** — mask generation and wafer processing  
-10. **Post-silicon Bring-up / Validation** — load software, test I/O, debug  
+### 🧩 What's Inside an SoC?
 
-At many stages, you’ll discover a violation or bottleneck and need to revisit earlier decisions (architecture, partitioning, etc.).
+1. **Processor (CPU)** 🖥️
+   - Executes instructions and crunches numbers
+   - Runs your programs and handles logic
 
----
+2. **Memory** 💾
+   - **RAM**: Temporary storage for active tasks
+   - **ROM/Flash**: Permanent storage that survives power-offs
 
-## 🍼 Where BabySoC Enters & Why It Matters
+3. **Input/Output Interfaces** 🔌
+   - Connects to cameras, USB devices, displays, and sensors
+   - Acts as the gateway between your chip and the outside world
 
-BabySoC is your “toy SoC,” but it is *real* enough to teach you meaningful lessons. Its value lies in:
+4. **Graphics Engine (GPU)** 🎮
+   - Renders visuals and animations
+   - Powers everything from video playback to gaming
 
-- **Concrete grounding**: abstract concepts (clock-domain crossing, arbitration, interface mismatch) actually show up in your design.
-- **Focused complexity**: it’s not a million-gate monster, but it’s complex enough to reveal challenges.
-- **Rapid iteration**: you can test, break, fix, and learn quickly.
-- **Bridge to scaling**: once BabySoC works, you can add features (cache, multiple cores, more peripherals, NoC) and see how the architecture must evolve.
-- **HW–SW feedback**: load firmware, see how software stresses bus, memory, how delays or latencies affect behavior.
+5. **Signal Processors (DSP)** 🎵
+   - Handles audio and video processing
+   - Cleans up noise, enhances quality, and manages multimedia
 
-In my journey, BabySoC is the stage where theory meets reality — the place where I internalize “why” behind design rules.
+6. **Power Management** 🔋
+   - Keeps energy consumption in check
+   - Critical for battery-powered gadgets
 
----
+7. **Wireless & Security** 📡
+   - Wi-Fi, Bluetooth, encryption modules
+   - Varies based on the chip's purpose
 
-## 🧠 My Insights & Takeaways
+### ✨ Why SoCs Rule
 
-- The hardest problems are often not in a core or block, but in the **connectivity and orchestration** (interconnect, domain crossings, arbitration).  
-- Many bugs are *interface bugs* — subtle mismatches in signal direction, handshakes, timing windows.  
-- Tradeoffs are everywhere: pushing for speed often costs power or area; simplifying control often wastes cycles.  
-- Even a small SoC forces you to think holistically — you can’t optimize just one block without considering effects on others.  
-- The more you tinker (break things, fix them), the faster you develop intuition for what scales and what doesn’t.
+- **Compact Design**: Everything fits in your pocket 📏
+- **Power Sippers**: Use less energy, last longer 🔋
+- **Lightning Fast**: Short distances = speedy data transfer ⚡
+- **Cost-Effective**: One chip beats buying many parts 💰
+- **Rock Solid**: Fewer components = fewer things that can break 🛡️
 
----
+### 🌍 SoCs are everywhere! 
 
-## 🔭 Future Directions & Next Steps
+- Smartphones & tablets (Apple A-series, Snapdragon, Exynos)
+- Smartwatches and fitness trackers
+- Smart home devices and IoT sensors
+- Gaming consoles (like Nintendo Switch with NVIDIA Tegra)
+- Modern cars, TVs, and home appliances
 
-Here are ideas I want to explore next:
+### 🚧 But comes with it's own challenges
 
-- Extend BabySoC with **cache coherence** or **multi-core** support  
-- Replace bus with a **simple NoC** and study scalability  
-- Add **power gating** or dynamic voltage/frequency scaling  
-- Integrate a **custom accelerator** (e.g. for signal processing or ML)  
-- Build a full **HW–SW stack**: toolchain, bootloader, drivers, OS  
-
----
-
-## 📚 Suggested References / Further Reading
-
-- *“System-on-a-Chip”* — wiki / foundational overview :contentReference[oaicite:1]{index=1}  
-- Research & articles on NoC, bus architectures, IP reuse  
-- Papers and tutorials on low-power SoC design, clock-domain crossings, verification  
+- **Complex Design**: Fitting everything together requires serious engineering chops (Just think of it, TSMC just the only company who pioneers this complex process)
+- **Heat Management**: Cramped components can get toasty 🔥 (for ex: the Iphone heats up a lot while charging r playing games)
+- **Limited Flexibility**: Once fabricated, changes are tough to make
 
 ---
 
-✨ That’s my polished version. Inject your own examples (“in my BabySoC, I hit a bus arbitration bug when …”) or diagrams, so it becomes unmistakably yours. Want me to generate a version with diagram placeholders (ASCII or image links) too?
-::contentReference[oaicite:2]{index=2}
+## 🎨 Types of SoCs
+
+### 🔧 Microcontroller-Based SoC
+Perfect for simple control tasks with minimal power draw. You'll find these in:
+- Home appliances (smart thermostats, washing machines)
+- Automotive systems (engine control units)
+- IoT sensors and wearables
+
+### 💪 Microprocessor-Based SoC
+Built for heavy lifting—running operating systems and complex apps:
+- Smartphones and tablets
+- Portable gaming devices
+- Media players
+
+### 🎯 Application-Specific SoC
+Custom-built for specialized, high-performance jobs:
+- Graphics cards and AI accelerators
+- Network routers and switches
+- Industrial automation systems
+- Financial trading terminals
+
+---
+
+## 🔬 Where does VSDBabySoC come into picture?
+
+VSDBabySoC is a compact RISC-V-based SoC designed for education and experimentation. Built on **Sky130 technology**, it's perfect for learning how digital and analog worlds connect.
+
+### 🎭 The Three Main Characters
+
+#### 1️⃣ **RVMYTH - The Brain** 🧠
+A customizable RISC-V CPU that handles all the processing. It's open-source, which means you can peek under the hood and modify it. RVMYTH uses its `r17` register to cycle through data values that get sent to the DAC.
+
+#### 2️⃣ **PLL - The Heartbeat** 
+Generates a stable, synchronized clock signal that keeps everything in perfect timing. Without it, your processor and DAC would be go in chaos!
+
+**Why We Need PLLs:**
+- **Clock Distribution**: Long wires cause delays; PLLs compensate for this
+- **Jitter Reduction**: Eliminates timing variations in signals
+- **Multiple Frequencies**: Different chip sections often need different clock speeds
+- **Crystal Accuracy**: Real-world oscillators drift due to temperature, aging, and manufacturing tolerances (measured in parts per million)
+
+**PLL Components:**
+- **Phase Detector**: Compares input and output signals, detects phase differences
+- **Loop Filter**: Smooths out the error signal
+- **Voltage-Controlled Oscillator (VCO)**: Adjusts frequency based on the control voltage
+
+#### 3️⃣ **DAC - The Translator** 🔄
+Converts digital values (ones and zeros) into smooth analog signals that real-world devices understand.
+
+**VSDBabySoC uses a 10-bit DAC**, meaning it can represent 1,024 different voltage levels (2^10).
+
+**Common DAC Architectures:**
+- **Weighted Resistor DAC**: Uses resistors of different values to create the analog output
+- **R-2R Ladder DAC**: Uses a repeating pattern of resistors (R and 2R values) for simpler, more scalable designs
+
+---
+
+## ⚙️ How VSDBabySoC Works
+
+Here's the flow from power-on to analog output:
+
+1. **🔌 Power Up & Clock Generation**
+   - BabySoC receives an input signal
+   - The PLL kicks in and generates a stable clock
+   - All components synchronize to this clock signal
+
+2. **🧮 Data Processing**
+   - RVMYTH executes instructions
+   - Values cycle through the `r17` register
+   - Data gets prepared for analog conversion
+
+3. **📡 Analog Signal Output**
+   - The DAC receives digital values from RVMYTH
+   - Converts them into analog signals
+   - Output can drive speakers, displays, or other analog devices
+   - Results are saved to a file called `OUT`
+
+---
+
+## 🎓 Learning Outcomes
+
+Working with VSDBabySoC teaches you:
+- RISC-V processor architecture
+- Clock generation and synchronization
+- Digital-to-analog conversion techniques
+- SoC integration and timing analysis
+- Open-source hardware design principles
+
+---
+
+## 🛠️ Technology Stack
+
+- **Process Technology**: Sky130 (130nm process)
+- **ISA**: RISC-V (open-source instruction set)
+- **Design Flow**: RTL to GDSII
+- **Verification**: Mixed-signal simulation
+
+---
+
+## 🌟 Why This Project Matters
+
+VSDBabySoC bridges the gap between theoretical knowledge and practical implementation. By combining a processor, clock generator, and DAC, you get hands-on experience with:
+- Complete SoC design workflows
+- Mixed-signal circuit integration
+- Real-world interfacing challenges
+- Open-source hardware development
+
+Perfect for students, hobbyists, and anyone curious about how modern chips actually work! 🎉
+
+
+</details>
+
+<details>
+<summary>Patr2</summary>
+
+
+## Labs
+
+
+# 🚀 VSDBabySoC - Functional Modeling and Simulation
+
+Welcome to my VSDBabySoC project repository! This is a hands-on lab demonstrating functional modeling of a compact RISC-V-based System-on-Chip (SoC) that integrates a processor core, Phase-Locked Loop (PLL), and Digital-to-Analog Converter (DAC). The goal is to verify reset operations, clocking, and dataflow through simulations. 🔬
+
+***
+
+## 📋 Project Overview
+
+**Key Components:**
+
+- 🔹 **RVMYTH (RISC-V Core)**: A 5-stage pipelined processor written in TL-Verilog (`rvmyth.tlv`), which executes instructions and outputs data via register r17.
+- 🔹 **AVSDPLL**: PLL module (`avsdpll.v`) that generates a stable clock (CLK) from reference inputs (REF, VCO_IN).
+- 🔹 **AVSDDAC**: 10-bit DAC (`avsddac.v`) that converts digital data from the RISC-V core (via `RV_TO_DAC[9:0]` bus) to analog output (OUT).
+
+The SoC flow: Reset initializes everything ➡️ PLL locks and clocks the core ➡️ Core executes code and sends data to DAC ➡️ DAC produces analog signals. Both pre-synthesis (RTL) and post-synthesis (gate-level) simulations confirm functional correctness. ✅
+
+***
+
+## ⚙️ Setup \& Workflow Explanation
+
+
+### 🛠️ Tool Installation
+
+1. **Icarus Verilog \& GTKWave**: `brew install icarus-verilog gtkwave` (for compilation and waveform viewing).
+2. **SandPiper-SaaS**: `npm install -g sandpiper-saas` (compiles TL-Verilog to Verilog).
+3. **Yosys**:
+```
+ git clone https://github.com/YosysHQ/yosys.git
+ brew install cmake gcc gawk tcl-tk libtool bison flex make
+ brew install graphviz
+ cd yosys
+ git submodule update --init
+ make
+```
+5. Verified: `iverilog -V`, `gtkwave --version`, `yosys -V`
+
+### 📁 Project Setup
+
+- Cloned base structure from reference repos (https://github.com/manili/VSDBabySoC.git)
+- Organized files: `src/module/` (Verilog/TL-Verilog files), `src/include/` (headers like `sandpiper.vh`), `src/lib/` (Sky130 liberty files), `src/gls_model/` (gate primitives), `src/script/` (Yosys script `yosys.ys`).
+- Created `output/` for results
+
+
+
+### 🔧 Makefile Explanation
+
+The `Makefile` automates the entire flow: TL-Verilog compilation, pre/post-synthesis simulations, and synthesis. It uses variables for paths (e.g., `SRC_PATH = src`, `OUTPUT_PATH = output`) and phony targets for clean builds.
+
+**Full Makefile Code** 
+
+```makefile
+# VSDBabySoC Makefile - Automates simulation & synthesis (local Yosys, no Docker)
+
+SRC_PATH = src
+LIB_PATH = $(SRC_PATH)/lib
+GDS_PATH = $(SRC_PATH)/gds
+LEF_PATH = $(SRC_PATH)/lef
+SDC_PATH = $(SRC_PATH)/sdc
+MODULE_PATH = $(SRC_PATH)/module
+INCLUDE_PATH = $(SRC_PATH)/include
+LAYOUT_CONF_PATH = $(SRC_PATH)/layout_conf
+OUTPUT_PATH = output
+# OPENLANE_PATH = /path/to/OpenLane  # Comment out for local Yosys
+# PDKS_PATH = $(OPENLANE_PATH)/pdks
+# OPENLANE_VER = 2021.09.09_03.00.48  # For Docker if needed
+
+STA_PATH = $(OUTPUT_PATH)/sta
+SYNTH_PATH = $(OUTPUT_PATH)/synth
+COMPILED_TLV_PATH = $(OUTPUT_PATH)/compiled_tlv
+PRE_SYNTH_SIM_PATH = $(OUTPUT_PATH)/pre_synth_sim
+POST_SYNTH_SIM_PATH = $(OUTPUT_PATH)/post_synth_sim
+
+.PHONY: all sim clean pre_synth_sim post_synth_sim synth
+
+all: sim
+
+sim: pre_synth_sim post_synth_sim
+
+clean:
+	rm -rf $(OUTPUT_PATH)
+
+# TL-Verilog compilation & Pre-synthesis simulation
+pre_synth_sim: $(COMPILED_TLV_PATH)
+	if [ ! -f "$(PRE_SYNTH_SIM_PATH)/pre_synth_sim.vcd" ]; then \
+		mkdir -p $(PRE_SYNTH_SIM_PATH); \
+		iverilog -o $(PRE_SYNTH_SIM_PATH)/pre_synth_sim.out -DPRE_SYNTH_SIM \
+			$(MODULE_PATH)/testbench.v \
+			-I $(INCLUDE_PATH) -I $(MODULE_PATH) -I $(COMPILED_TLV_PATH); \
+		cd $(PRE_SYNTH_SIM_PATH); ./pre_synth_sim.out; \
+	fi
+
+$(COMPILED_TLV_PATH):
+	mkdir -p $(COMPILED_TLV_PATH)
+	sandpiper-saas -i $(MODULE_PATH)/rvmyth.tlv -o rvmyth.v \
+		--bestsv --noline -p verilog --outdir $(COMPILED_TLV_PATH)
+
+# Synthesis with local Yosys
+synth: $(COMPILED_TLV_PATH)
+	if [ ! -f "$(SYNTH_PATH)/vsdbabysoc.synth.v" ]; then \
+		mkdir -p $(SYNTH_PATH); \
+		cd $(SRC_PATH); yosys -s script/yosys.ys | tee ../$(SYNTH_PATH)/synth.log; \
+	fi
+
+# Post-synthesis simulation
+post_synth_sim: synth
+	if [ ! -f "$(POST_SYNTH_SIM_PATH)/post_synth_sim.vcd" ]; then \
+		mkdir -p $(POST_SYNTH_SIM_PATH); \
+		iverilog -o $(POST_SYNTH_SIM_PATH)/post_synth_sim.out -DPOST_SYNTH_SIM -DFUNCTIONAL -DUNIT_DELAY=#1 \
+			-I $(INCLUDE_PATH) -I $(MODULE_PATH) -I $(SRC_PATH)/gls_model -I $(SYNTH_PATH) \
+			$(MODULE_PATH)/testbench.v; \
+		cd $(POST_SYNTH_SIM_PATH); ./post_synth_sim.out; \
+	fi
+
+sta: synth
+	# Add OpenSTA if needed for timing analysis
+```
+
+**How It Works:**
+
+- **Pre-synth (`make pre_synth_sim`)**: Compiles `rvmyth.tlv` to `rvmyth.v`, runs RTL sim with `-DPRE_SYNTH_SIM` (testbench includes RTL modules), dumps VCD.
+- **Synthesis (`make synth`)**: Yosys reads Verilog/liberty files, synthesizes to gate netlist (`vsdbabysoc.synth.v`), logs stats (e.g., gate count).
+- **Post-synth (`make post_synth_sim`)**: Compiles netlist with `-DPOST_SYNTH_SIM` (testbench includes gates/primitives), adds unit delays for timing.
+
+***
+
+## 📝 Lab Steps Followed
+
+### 1️⃣ Clone the BabySoC Project Repo
+
+```bash
+https://github.com/manili/VSDBabySoC.git
+cd VSDBabySoC
+```
+
+
+### 2️⃣ Compile the BabySoC Verilog Modules using iverilog
+
+- TL-Verilog first: `sandpiper-saas` handles `rvmyth.tlv`.
+- Then: `make pre_synth_sim` compiles everything (testbench + modules) into executable.
+
+
+### 3️⃣ Simulate and Generate .vcd Waveform Files
+
+- Pre-synth: creates `output/pre_synth_sim/pre_synth_sim.vcd`.
+- Post-synth: `make post_synth_sim` synthesizes first, then gate-level sim → `output/post_synth_sim/post_synth_sim.vcd`.
+
+
+### 4️⃣ Open .vcd Files in GTKWave and Analyze
+
+```bash
+cd output/pre_synth_sim && gtkwave pre_synth_sim.vcd
+```
+
+<img width="1142" height="726" alt="Screenshot 2025-10-01 at 1 02 42 PM" src="https://github.com/user-attachments/assets/13f094c9-843d-40bd-8bb4-617549836d3a" />
+
+*** 
+
+```
+cd output/post_synth_sim && gtkwave post_synth_sim.vcd
+```
+<img width="1142" height="761" alt="Screenshot 2025-10-01 at 3 33 41 PM" src="https://github.com/user-attachments/assets/9aee0f38-3b7b-4511-9bd2-264ebfe6b250" />
+
+
+
+- **Reset**: Check initialization (all zeros during assert).
+- **Clocking**: Verify PLL CLK stability (no glitches, 50% duty).
+- **Dataflow**: Trace RISC-V r17 → RV_TO_DAC → DAC OUT (incrementing values).
+
+
+### 5️⃣  Observations 
+
+
+***
+
+## 📊 Simulation Results \& Analysis
+
+### 🔄 Reset Operation (Pre-Synthesis)
+
+**Explanation:** Reset (high) zeros registers (r17=0, OUT=0V). Deassert starts PLL and core fetch. Verifies clean initialization—no hanging states. (Time: t=0 to 10ns)
+
+### 🕒 Clocking (Pre-Synthesis)
+
+**Explanation:** PLL enables after ENb_VCO/REF, locks to ~10MHz CLK. Stable edges drive core/DAC sync. No jitter confirms PLL reliability. (Focus: CLK vs REF/VCO_IN)
+
+### 📈 Dataflow Between Modules (Pre-Synthesis)
+
+**Explanation:** Core executes (addi increments r17), sends via RV_TO_DAC[9:0] to DAC D input. OUT scales analog (0-1V for 0-1023). Proves end-to-end functionality. (Trace: r17 → bus → OUT)
+
+### ⚡ Post-Synthesis Comparison
+
+**Explanation:** Gate-level (Sky130 cells) matches RTL: Same sequences, but ~100ps delays from gates (e.g., inv_1 cells). No logic changes—synthesis success! (Synth.log: ~500 gates, 0 warnings)
+
+
+
+## 📂 File Structure
+
+```
+VSDBabySoC/
+├── Makefile                 # 🚀 Build automation (pre/post-synth sims)
+├── README.md                # 📖 This guide
+├── src/                     # Source code
+│   ├── module/              # vsdbabysoc.v, rvmyth.tlv, avsdpll.v, avsddac.v, testbench.v
+│   ├── include/             # .vh headers (sandpiper.vh)
+│   ├── lib/                 # .lib files (Sky130 std cells)
+│   ├── gls_model/           # primitives.v, sky130_fd_sc_hd.v
+│   └── script/              # yosys.ys (synthesis script)
+├── output/                  # 🛠️ Results (gitignored large files)
+│   ├── compiled_tlv/        # rvmyth.v (from TL-Verilog)
+│   ├── pre_synth_sim/       # RTL VCD/logs
+│   ├── post_synth_sim/      # Gate-level VCD/logs
+│   └── synth/               # vsdbabysoc.synth.v + log
+
+```
+
+
+
+## 🛠️ Tools Used
+
+- 🔧 **Icarus Verilog (iverilog)**: Compiles/simulates Verilog.
+- 👁️ **GTKWave**: Views/analyzes VCD waveforms.
+- ⚙️ **SandPiper-SaaS**: TL-Verilog → Verilog conversion.
+- 🏗️ **Yosys**: RTL synthesis to gates (local install).
+
+
