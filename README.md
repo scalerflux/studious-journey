@@ -295,8 +295,6 @@ post_synth_sim: synth
 			$(MODULE_PATH)/testbench.v; \
 		cd $(POST_SYNTH_SIM_PATH); ./post_synth_sim.out; \
 	fi
-
-sta: synth
 	
 ```
 
