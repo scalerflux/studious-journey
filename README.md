@@ -171,7 +171,7 @@ Here's the flow from power-on to analog output:
 </details>
 
 <details>
-<summary>Part2</summary>
+<summary>Part 2</summary>
 
 
 ## Labs
@@ -398,5 +398,5 @@ VSDBabySoC/
 
 ```
 
-Disclaimer: Content has been  refined with help of generative AI for effiecincy n clean look
+Disclaimer: Content has been refined with help of generative AI for effiecincy n clean look. Claude 4.5 has been used in code debugging
 
