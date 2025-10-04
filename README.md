@@ -318,14 +318,14 @@ cd VSDBabySoC
 
 ### 2️⃣ Compile the BabySoC Verilog Modules using iverilog
 
-- TL-Verilog first: `sandpiper-saas` handles `rvmyth.tlv`.
-- Then: `make pre_synth_sim` compiles everything (testbench + modules) into executable.
+- TL-Verilog first: `sandpiper-saas` handles `rvmyth.tlv`
+- Then: `make pre_synth_sim` compiles everything (testbench + modules) into executable
 
 
 ### 3️⃣ Simulate and Generate .vcd Waveform Files
 
-- Pre-synth: creates `output/pre_synth_sim/pre_synth_sim.vcd`.
-- Post-synth: `make post_synth_sim` synthesizes first, then gate-level sim → `output/post_synth_sim/post_synth_sim.vcd`.
+- Pre-synth: creates `output/pre_synth_sim/pre_synth_sim.vcd`
+- Post-synth: `make post_synth_sim` synthesizes first, then gate-level sim → `output/post_synth_sim/post_synth_sim.vcd`
 
 
 ### 4️⃣ Open .vcd Files in GTKWave and Analyze
