@@ -359,15 +359,15 @@ cd output/post_synth_sim && gtkwave post_synth_sim.vcd
 
 ### 🔄 Reset Operation (Pre-Synthesis)
 
-Reset (high) zeros registers (r17=0, OUT=0V). Deassert starts PLL and core fetch. Verifies clean initialization—no hanging states. (Time: t=0 to 10ns)
+Reset (high) zeros registers (r17=0, OUT=0V). Deassert starts PLL and core fetch. Verifies clean initialization—no hanging states
 
 ### 🕒 Clocking (Pre-Synthesis)
 
-PLL enables after ENb_VCO/REF, locks to ~10MHz CLK. Stable edges drive core/DAC sync. No jitter confirms PLL reliability. (Focus: CLK vs REF/VCO_IN)
+PLL enables after ENb_VCO/REF, locks to ~10MHz CLK. Stable edges drive core/DAC sync. No jitter confirms PLL reliability
 
 ### 📈 Dataflow Between Modules (Pre-Synthesis)
 
-Core executes (addi increments r17), sends via RV_TO_DAC[9:0] to DAC D input. OUT scales analog (0-1V for 0-1023). Proves end-to-end functionality. (Trace: r17 → bus → OUT)
+Core executes (addi increments r17), sends via RV_TO_DAC[9:0] to DAC D input. OUT scales analog. Proves end-to-end functionality. (Trace: r17 → bus → OUT)
 
 ### ⚡ Post-Synthesis Comparison
 
