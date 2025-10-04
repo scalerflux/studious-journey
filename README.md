@@ -248,9 +248,7 @@ MODULE_PATH = $(SRC_PATH)/module
 INCLUDE_PATH = $(SRC_PATH)/include
 LAYOUT_CONF_PATH = $(SRC_PATH)/layout_conf
 OUTPUT_PATH = output
-# OPENLANE_PATH = /path/to/OpenLane  # Comment out for local Yosys
-# PDKS_PATH = $(OPENLANE_PATH)/pdks
-# OPENLANE_VER = 2021.09.09_03.00.48  # For Docker if needed
+
 
 STA_PATH = $(OUTPUT_PATH)/sta
 SYNTH_PATH = $(OUTPUT_PATH)/synth
@@ -300,7 +298,7 @@ post_synth_sim: synth
 	fi
 
 sta: synth
-	# Add OpenSTA if needed for timing analysis
+	
 ```
 
 **How It Works:**
