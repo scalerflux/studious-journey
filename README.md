@@ -109,12 +109,12 @@ Custom-built for specialized, high-performance jobs:
 
 ## 🔬 Where does VSDBabySoC come into picture?
 
-VSDBabySoC is a compact RISC-V-based SoC designed for education and experimentation. Built on **Sky130 technology**, it's perfect for learning how digital and analog worlds connect.
+VSDBabySoC is a compact RISC-V-based SoC designed for education and experimentation. Built on **Sky130 technology**, it's perfect for learning how digital and analog worlds connect
 
 ### 🎭 The Three Main Characters
 
 #### 1️⃣ **RVMYTH - The Brain** 🧠
-A customizable RISC-V CPU that handles all the processing. It's open-source, which means you can peek under the hood and modify it. RVMYTH uses its `r17` register to cycle through data values that get sent to the DAC.
+A customizable RISC-V CPU that handles all the processing. It's open-source, which means you can peek under the hood and modify it. RVMYTH uses its `r17` register to cycle through data values that get sent to the DAC
 
 #### 2️⃣ **PLL - The Heartbeat** 
 Generates a stable, synchronized clock signal that keeps everything in perfect timing. Without it, your processor and DAC would be go in chaos!
@@ -134,9 +134,9 @@ Generates a stable, synchronized clock signal that keeps everything in perfect t
 
 
 #### 3️⃣ **DAC - The Translator** 🔄
-Converts digital values (ones and zeros) into smooth analog signals that real-world devices understand.
+Converts digital values (ones and zeros) into smooth analog signals that real-world devices understand
 
-**VSDBabySoC uses a 10-bit DAC**, meaning it can represent 1,024 different voltage levels (2^10).
+**VSDBabySoC uses a 10-bit DAC**, meaning it can represent 1,024 different voltage levels (2^10)
 
 **Common DAC Architectures:**
 - **Weighted Resistor DAC**: Uses resistors of different values to create the analog output
@@ -179,7 +179,7 @@ Here's the flow from power-on to analog output:
 
 # 🚀 VSDBabySoC - Functional Modeling and Simulation
 
-This is a hands-on lab demonstrating functional modeling of a compact RISC-V-based System-on-Chip (SoC) that integrates a processor core, Phase-Locked Loop (PLL), and Digital-to-Analog Converter (DAC). The goal is to verify reset operations, clocking, and dataflow through simulations. 🔬
+This is a hands-on lab demonstrating functional modeling of a compact RISC-V-based System-on-Chip (SoC) that integrates a processor core, Phase-Locked Loop (PLL), and Digital-to-Analog Converter (DAC). The goal is to verify reset operations, clocking, and dataflow through simulations 🔬
 
 ***
 
@@ -187,30 +187,30 @@ This is a hands-on lab demonstrating functional modeling of a compact RISC-V-bas
 
 **Key Components:**
 
-- 🔹 **RVMYTH (RISC-V Core)**: A 5-stage pipelined processor written in TL-Verilog (`rvmyth.tlv`), which executes instructions and outputs data via register r17.
-- 🔹 **AVSDPLL**: PLL module (`avsdpll.v`) that generates a stable clock (CLK) from reference inputs (REF, VCO_IN).
-- 🔹 **AVSDDAC**: 10-bit DAC (`avsddac.v`) that converts digital data from the RISC-V core (via `RV_TO_DAC[9:0]` bus) to analog output (OUT).
+- 🔹 **RVMYTH (RISC-V Core)**: A 5-stage pipelined processor written in TL-Verilog (`rvmyth.tlv`), which executes instructions and outputs data via register r17
+- 🔹 **AVSDPLL**: PLL module (`avsdpll.v`) that generates a stable clock (CLK) from reference inputs (REF, VCO_IN)
+- 🔹 **AVSDDAC**: 10-bit DAC (`avsddac.v`) that converts digital data from the RISC-V core (via `RV_TO_DAC[9:0]` bus) to analog output (OUT)
 
-The SoC flow: Reset initializes everything ➡️ PLL locks and clocks the core ➡️ Core executes code and sends data to DAC ➡️ DAC produces analog signals. Both pre-synthesis (RTL) and post-synthesis (gate-level) simulations confirm functional correctness. ✅
+The SoC flow: Reset initializes everything ➡️ PLL locks and clocks the core ➡️ Core executes code and sends data to DAC ➡️ DAC produces analog signals. Both pre-synthesis (RTL) and post-synthesis (gate-level) simulations confirm functional correctness ✅
 
 ### 🛠️ Tools Used
 
-- 🔧 **Icarus Verilog (iverilog)**: Compiles/simulates Verilog.
-- 👁️ **GTKWave**: Views/analyzes VCD waveforms.
-- ⚙️ **SandPiper-SaaS**: TL-Verilog → Verilog conversion.
-- 🏗️ **Yosys**: RTL synthesis to gates (local install).
+- 🔧 **Icarus Verilog (iverilog)**: Compiles/simulates Verilog
+- 👁️ **GTKWave**: Views/analyzes VCD waveforms
+- ⚙️ **SandPiper-SaaS**: TL-Verilog → Verilog conversion
+- 🏗️ **Yosys**: RTL synthesis to gates 
 
 
 
 ***
 
-## ⚙️ Setup \& Workflow Explanation
+## ⚙️ Setup & Workflow 
 
 
 ### 🛠️ Tool Installation
 
-1. **Icarus Verilog \& GTKWave**: `brew install icarus-verilog gtkwave` (for compilation and waveform viewing).
-2. **SandPiper-SaaS**: `npm install -g sandpiper-saas` (compiles TL-Verilog to Verilog).
+1. **Icarus Verilog \& GTKWave**: `brew install icarus-verilog gtkwave` (for compilation and waveform viewing)
+2. **SandPiper-SaaS**: `npm install -g sandpiper-saas` (compiles TL-Verilog to Verilog)
 3. **Yosys**:
 ```
  git clone https://github.com/YosysHQ/yosys.git
@@ -225,14 +225,14 @@ The SoC flow: Reset initializes everything ➡️ PLL locks and clocks the core 
 ### 📁 Project Setup
 
 - Cloned base structure from reference repos (https://github.com/manili/VSDBabySoC.git)
-- Organized files: `src/module/` (Verilog/TL-Verilog files), `src/include/` (headers like `sandpiper.vh`), `src/lib/` (Sky130 liberty files), `src/gls_model/` (gate primitives), `src/script/` (Yosys script `yosys.ys`).
+- Organized files: `src/module/` (Verilog/TL-Verilog files), `src/include/` (headers like `sandpiper.vh`), `src/lib/` (Sky130 liberty files), `src/gls_model/` (gate primitives), `src/script/` (Yosys script `yosys.ys`)
 - Created `output/` for results
 
 
 
 ### 🔧 Makefile Explanation
 
-The `Makefile` automates the entire flow: TL-Verilog compilation, pre/post-synthesis simulations, and synthesis. It uses variables for paths (e.g., `SRC_PATH = src`, `OUTPUT_PATH = output`) and phony targets for clean builds.
+The `Makefile` automates the entire flow: TL-Verilog compilation, pre/post-synthesis simulations, and synthesis. It uses variables for paths (e.g., `SRC_PATH = src`, `OUTPUT_PATH = output`) and phony targets for clean builds
 
 **Full Makefile Code** 
 
@@ -300,9 +300,9 @@ post_synth_sim: synth
 
 **How It Works:**
 
-- **Pre-synth (`make pre_synth_sim`)**: Compiles `rvmyth.tlv` to `rvmyth.v`, runs RTL sim with `-DPRE_SYNTH_SIM` (testbench includes RTL modules), dumps VCD.
-- **Synthesis (`make synth`)**: Yosys reads Verilog/liberty files, synthesizes to gate netlist (`vsdbabysoc.synth.v`), logs stats (e.g., gate count).
-- **Post-synth (`make post_synth_sim`)**: Compiles netlist with `-DPOST_SYNTH_SIM` (testbench includes gates/primitives), adds unit delays for timing.
+- **Pre-synth (`make pre_synth_sim`)**: Compiles `rvmyth.tlv` to `rvmyth.v`, runs RTL sim with `-DPRE_SYNTH_SIM` (testbench includes RTL modules), dumps VCD
+- **Synthesis (`make synth`)**: Yosys reads Verilog/liberty files, synthesizes to gate netlist (`vsdbabysoc.synth.v`), logs stats (e.g., gate count)
+- **Post-synth (`make post_synth_sim`)**: Compiles netlist with `-DPOST_SYNTH_SIM` (testbench includes gates/primitives), adds unit delays for timing
 
 ***
 
@@ -345,9 +345,9 @@ cd output/post_synth_sim && gtkwave post_synth_sim.vcd
 
 
 
-- **Reset**: Check initialization (all zeros during assert).
-- **Clocking**: Verify PLL CLK stability (no glitches, 50% duty).
-- **Dataflow**: Trace RISC-V r17 → RV_TO_DAC → DAC OUT (incrementing values).
+- **Reset**: Check initialization (all zeros during assert)
+- **Clocking**: Verify PLL CLK stability 
+- **Dataflow**: Trace RISC-V r17 → RV_TO_DAC → DAC OUT (incrementing values)
 
 
 ### 5️⃣  Observations 
@@ -371,7 +371,7 @@ Core executes (addi increments r17), sends via RV_TO_DAC[9:0] to DAC D input. OU
 
 ### ⚡ Post-Synthesis Comparison
 
-Gate-level (Sky130 cells) matches RTL: Same sequences, No logic changes—synthesis success! 
+Gate-level (Sky130 cells) matches RTL: Same sequences, No logic changes—synthesis success 
 
 <img width="1043" height="736" alt="Screenshot 2025-10-04 at 5 45 30 PM" src="https://github.com/user-attachments/assets/b224a30e-8038-45fd-baeb-e30783cb2296" />
 
@@ -398,6 +398,5 @@ VSDBabySoC/
 
 ```
 
-
-
+Disclaimer: Content has been  refined with help of generative AI for effiecincy n clean look
 
