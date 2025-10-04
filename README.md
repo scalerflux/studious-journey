@@ -350,9 +350,6 @@ cd output/post_synth_sim && gtkwave post_synth_sim.vcd
 - **Dataflow**: Trace RISC-V r17 → RV_TO_DAC → DAC OUT (incrementing values)
 
 
-### 5️⃣  Observations 
-
-
 ***
 
 ## 📊 Simulation Results \& Analysis
